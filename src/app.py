@@ -11,8 +11,12 @@ class Controller(BaseHTTPRequestHandler):
       "configmaps": len(children["ConfigMap.v1"]),
     }
     prefix = "rso-"
-    kubeconfig = base64.b64decode(parent["data"]["value"]).decode("utf-8")
-    print(yaml.safe_load(kubeconfig))
+
+    kubeconfig = yaml.safe_load(base64.b64decode(parent["data"]["value"]).decode("utf-8"))
+
+    kubernetesServer = kubeconfig["clusters"][0]["cluster"]["server"]
+    kubernetesCa = base64.b64decode(kubeconfig["clusters"][0]["cluster"]["certificate-authority-data"]).decode("utf-8")
+
     kubeconfigName = parent["metadata"]["name"]
     clusterNamespace = parent["metadata"]["namespace"]
     clusterName = parent["metadata"]["labels"]["cluster.x-k8s.io/cluster-name"]
@@ -42,7 +46,7 @@ class Controller(BaseHTTPRequestHandler):
                   "namespace": clusterNamespace,
                   "type": "ConfigMap"
                 },
-                "url": "https://10.43.220.193/k8s/clusters/c-m-kpfqd4s2"
+                "url": kubernetesServer
               }
             }
           }
@@ -56,7 +60,7 @@ class Controller(BaseHTTPRequestHandler):
           "namespace": clusterNamespace
         },
         "data": {
-          "ca.crt": "-----BEGIN CERTIFICATE-----\nMIIBvjCCAWOgAwIBAgIBADAKBggqhkjOPQQDAjBGMRwwGgYDVQQKExNkeW5hbWlj\nbGlzdGVuZXItb3JnMSYwJAYDVQQDDB1keW5hbWljbGlzdGVuZXItY2FAMTcxOTQy\nOTI4MTAeFw0yNDA2MjYxOTE0NDFaFw0zNDA2MjQxOTE0NDFaMEYxHDAaBgNVBAoT\nE2R5bmFtaWNsaXN0ZW5lci1vcmcxJjAkBgNVBAMMHWR5bmFtaWNsaXN0ZW5lci1j\nYUAxNzE5NDI5MjgxMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEHlGspFAnxLYa\nj/Nlodurwuq3+kvb+j/O/HRn6jqKxqHebnO/0ZCI62ld2jb81kKLG5lJr4fXHl/k\ns/xB5bLuNKNCMEAwDgYDVR0PAQH/BAQDAgKkMA8GA1UdEwEB/wQFMAMBAf8wHQYD\nVR0OBBYEFB4jPxF2IpdNnhfOUaaZ691+dBPeMAoGCCqGSM49BAMCA0kAMEYCIQCf\nr3XMHI4p8AM3qGCedkCuOU3T2j/2wCymITnFBF8drwIhAPd6fqMYWRQzBua2anrU\nEL1cz3d5MH4ziXiIVQOmfjGG\n-----END CERTIFICATE-----\n"
+          "ca.crt": kubernetesCa
         }
       }
     ]

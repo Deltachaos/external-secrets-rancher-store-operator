@@ -23,7 +23,7 @@ data:
             "apiVersion": "external-secrets.io/v1beta1",
             "kind": "ClusterSecretStore",
             "metadata": {
-              "name": parent["metadata"]["name"],
+              "name": "rso-" + parent["metadata"]["name"],
               "labels": {
                 "app.kubernetes.io/name": parent["metadata"]["name"]
               }
@@ -44,7 +44,7 @@ data:
                   "server": {
                     "caProvider": {
                       "key": "ca.crt",
-                      "name": parent["metadata"]["name"] + "-kube-root-ca.crt",
+                      "name": "rso-" + parent["metadata"]["name"] + "-kube-root-ca.crt",
                       "namespace": parent["metadata"]["namespace"],
                       "type": "ConfigMap"
                     },
@@ -58,7 +58,7 @@ data:
             "apiVersion": "v1",
             "kind": "ConfigMap",
             "metadata": {
-              "name": parent["metadata"]["name"] + "-kube-root-ca.crt",
+              "name": "rso-" + parent["metadata"]["name"] + "-kube-root-ca.crt",
               "namespace": parent["metadata"]["namespace"],
               "labels": {
                 "app.kubernetes.io/name": parent["metadata"]["name"]

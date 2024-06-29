@@ -44,17 +44,12 @@ spec:
             {{- toYaml .Values.readinessProbe | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          volumeMounts:
-            - name: app
-              mountPath: /app
           {{- with .Values.volumeMounts }}
+          volumeMounts:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-      volumes:
-        - name: app
-          configMap:
-            name: {{ include "external-secrets-rancher-store-operator.fullname" . }}-app
       {{- with .Values.volumes }}
+      volumes:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.nodeSelector }}

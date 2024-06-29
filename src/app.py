@@ -3,8 +3,7 @@ import json
 import base64
 import yaml
 from re import L
-from kubernetes.config.kube_config import KubeConfigLoader
-from kubernetes import client, config
+import kubernetes
 from io import StringIO
 import os
 import re
@@ -35,12 +34,11 @@ class Controller(BaseHTTPRequestHandler):
 
     kubeconfig = yaml.safe_load(base64.b64decode(parent["data"]["value"]).decode("utf-8"))
 
-    loader = KubeConfigLoader(kubeconfig)
-    client_config = client.Configuration()
-    loader.load_and_set(client_config)
-    client.Configuration.set_default(client_config)
-
-    v1 = client.CoreV1Api(api_client=config.new_client_from_config())
+    configuration = kubernetes.client.Configuration()
+    loader = kubernetes.config.kube_config.KubeConfigLoader(kubeconfig)
+    loader.load_and_set(configuration)
+    api_client=kubernetes.client.ApiClient(configuration)
+    v1 = kubernetes.client.CoreV1Api(api_client)
     namespaces = v1.list_namespace()
 
     kubernetesServer = kubeconfig["clusters"][0]["cluster"]["server"]

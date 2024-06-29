@@ -5,8 +5,8 @@ metadata:
 spec:
   generateSelector: true
   resources:
-    apiVersion: provisioning.cattle.io/v1
-    resource: clusters
+    - apiVersion: provisioning.cattle.io/v1
+      resource: clusters
   attachments:
     - apiVersion: v1
       resource: configmaps

@@ -7,6 +7,8 @@ spec:
   resources:
     - apiVersion: provisioning.cattle.io/v1
       resource: clusters
+      matchExpressions:
+        - { key: namespace, operator: In, values: [fleet-default] }
   attachments:
     - apiVersion: v1
       resource: configmaps

@@ -12,7 +12,7 @@ class Controller(BaseHTTPRequestHandler):
     }
     prefix = "rso-"
     kubeconfig = base64.b64decode(parent["data"]["value"]).decode("utf-8")
-    print(kubeconfig)
+    print(yaml.safe_load(kubeconfig))
     kubeconfigName = parent["metadata"]["name"]
     clusterNamespace = parent["metadata"]["namespace"]
     clusterName = parent["metadata"]["labels"]["cluster.x-k8s.io/cluster-name"]

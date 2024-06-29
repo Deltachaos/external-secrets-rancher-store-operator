@@ -1,10 +1,11 @@
 # external-secrets-rancher-store-operator
 
 This Kubernetes Operator creates a `ClusterSecretStore` for 
-[External Secrets Operator](https://external-secrets.io/latest/provider/kubernetes/), for every cluster managed by
+[External Secrets Operator](https://external-secrets.io/latest/provider/kubernetes/), for all namespaces in every cluster managed by
 the Rancher server, including the cluster `local` itself.
 
-The `ClusterSecretStore`'s are named `cluster-{{ clusterName }}`. The prefix cannot be configured currently.
+The `ClusterSecretStore`'s are named `cluster-{{ clusterName }}-{{ namespace }}`.
+The prefix cannot be configured currently.
 
 # Why should I use it?
 

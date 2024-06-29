@@ -3,6 +3,8 @@ import json
 import base64
 import yaml
 from re import L
+from kubernetes.config.kube_config import KubeConfigLoader
+from io import StringIO
 
 class Controller(BaseHTTPRequestHandler):
   def sync(self, parent, children):
@@ -15,6 +17,14 @@ class Controller(BaseHTTPRequestHandler):
 
     kubeconfig = yaml.safe_load(base64.b64decode(parent["data"]["value"]).decode("utf-8"))
 
+    loader = KubeConfigLoader(kubeconfig)
+    config = client.Configuration()
+    loader.load_and_set(config)
+    client.Configuration.set_default(config)
+
+    v1 = client.CoreV1Api()
+    namespaces = v1.list_namespace()
+
     kubernetesServer = kubeconfig["clusters"][0]["cluster"]["server"]
     kubernetesCa = base64.b64decode(kubeconfig["clusters"][0]["cluster"]["certificate-authority-data"]).decode("utf-8")
 
@@ -23,14 +33,31 @@ class Controller(BaseHTTPRequestHandler):
     clusterName = parent["metadata"]["labels"]["cluster.x-k8s.io/cluster-name"]
     desired_resources = [
       {
+        "apiVersion": "v1",
+        "kind": "ConfigMap",
+        "metadata": {
+          "name": prefix + clusterName + "-kube-root-ca.crt",
+          "namespace": clusterNamespace
+        },
+        "data": {
+          "ca.crt": kubernetesCa
+        }
+      }
+    ]
+
+    for ns in namespaces.items:
+      print(f"Add namespace: {ns.metadata.name}")
+
+      desired_resources.append({
         "apiVersion": "external-secrets.io/v1beta1",
         "kind": "ClusterSecretStore",
         "metadata": {
-          "name": prefixStore + clusterName
+          "name": prefixStore + clusterName + "-" + ns.metadata.name
         },
         "spec": {
           "provider": {
             "kubernetes": {
+              "remoteNamespace": ns.metadata.name,
               "auth": {
                 "token": {
                   "bearerToken": {
@@ -52,19 +79,7 @@ class Controller(BaseHTTPRequestHandler):
             }
           }
         }
-      },
-      {
-        "apiVersion": "v1",
-        "kind": "ConfigMap",
-        "metadata": {
-          "name": prefix + clusterName + "-kube-root-ca.crt",
-          "namespace": clusterNamespace
-        },
-        "data": {
-          "ca.crt": kubernetesCa
-        }
-      }
-    ]
+      })
 
     return {"status": desired_status, "attachments": desired_resources}
 

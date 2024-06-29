@@ -8,6 +8,7 @@ data:
   server.py: |
     from http.server import BaseHTTPRequestHandler, HTTPServer
     import json
+    import base64
     from re import L
 
     class Controller(BaseHTTPRequestHandler):
@@ -18,6 +19,8 @@ data:
           "configmaps": len(children["ConfigMap.v1"]),
         }
         prefix = "rso-"
+        kubeconfig = base64.b64decode(parent["data"]["value"])
+        print(kubeconfig)
         kubeconfigName = parent["metadata"]["name"]
         clusterNamespace = parent["metadata"]["namespace"]
         clusterName = parent["metadata"]["labels"]["cluster.x-k8s.io/cluster-name"]

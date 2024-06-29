@@ -7,12 +7,21 @@ from kubernetes.config.kube_config import KubeConfigLoader
 from kubernetes import client, config
 from io import StringIO
 import os
+import re
 
 class Controller(BaseHTTPRequestHandler):
   def matchesFilter(cluster, namespace):
     namespaceFilter = json.loads(os.environ['NAMESPACES'])
 
-    print(namespaceFilter)
+    for clusterFilter in namespaceFilter:
+        patternCluster = re.compile(clusterFilter["clusterName"])
+        if patternCluster.match(cluster):
+            for filter in clusterFilter["namespaces"]:
+                patternNamespace = re.compile(clusterFilter["clusterName"])
+                if patternNamespace.match(namespace):
+                    return True
+
+            return False
 
     return False
 
@@ -27,9 +36,9 @@ class Controller(BaseHTTPRequestHandler):
     kubeconfig = yaml.safe_load(base64.b64decode(parent["data"]["value"]).decode("utf-8"))
 
     loader = KubeConfigLoader(kubeconfig)
-    config = client.Configuration()
+    client_config = client.Configuration()
     loader.load_and_set(config)
-    client.Configuration.set_default(config)
+    client.Configuration.set_default(client_config)
 
     v1 = client.CoreV1Api(api_client=config.new_client_from_config())
     namespaces = v1.list_namespace()

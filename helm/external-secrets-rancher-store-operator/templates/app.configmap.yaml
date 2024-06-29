@@ -75,10 +75,10 @@ data:
       def do_POST(self):
         observed = json.loads(self.rfile.read(int(self.headers.get("content-length"))))
         print("parent")
-        print(observed["parent"])
+        print(observed["object"])
         print("children")
-        print(observed["children"])
-        desired = self.sync(observed["parent"], observed["children"])
+        print(observed["attachments"])
+        desired = self.sync(observed["object"], observed["attachments"])
         print("desired")
         print(desired)
 

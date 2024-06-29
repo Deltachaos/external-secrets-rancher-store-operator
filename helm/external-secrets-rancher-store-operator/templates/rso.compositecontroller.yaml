@@ -19,4 +19,4 @@ spec:
   hooks:
     sync:
       webhook:
-        url: http://{{ include "external-secrets-rancher-store-operator.fullname" . }}/sync
+        url: http://{{ include "external-secrets-rancher-store-operator.fullname" . }}.{{ .Release.Namespace }}/sync

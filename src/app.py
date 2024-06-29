@@ -14,7 +14,7 @@ class Controller(BaseHTTPRequestHandler):
 
     print(namespaceFilter)
 
-    return True
+    return False
 
   def sync(self, parent, children):
     desired_status = {

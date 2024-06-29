@@ -6,8 +6,16 @@ from re import L
 from kubernetes.config.kube_config import KubeConfigLoader
 from kubernetes import client, config
 from io import StringIO
+import os
 
 class Controller(BaseHTTPRequestHandler):
+  def matchesFilter(cluster, namespace):
+    namespaceFilter = json.loads(os.environ['NAMESPACES'])
+
+    print(namespaceFilter)
+
+    return True
+
   def sync(self, parent, children):
     desired_status = {
       "clustersecretstores": len(children["ClusterSecretStore.external-secrets.io/v1beta1"]),
@@ -25,6 +33,7 @@ class Controller(BaseHTTPRequestHandler):
 
     v1 = client.CoreV1Api(api_client=config.new_client_from_config())
     namespaces = v1.list_namespace()
+
 
     kubernetesServer = kubeconfig["clusters"][0]["cluster"]["server"]
     kubernetesCa = base64.b64decode(kubeconfig["clusters"][0]["cluster"]["certificate-authority-data"]).decode("utf-8")
@@ -47,6 +56,10 @@ class Controller(BaseHTTPRequestHandler):
     ]
 
     for ns in namespaces.items:
+      if not self.matchesFilter(clusterName, ns.metadata.name):
+          print(f"Skip namespace: {ns.metadata.name}")
+          continue
+
       print(f"Add namespace: {ns.metadata.name}")
 
       desired_resources.append({

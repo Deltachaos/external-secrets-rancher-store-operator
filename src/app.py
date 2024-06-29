@@ -11,6 +11,7 @@ class Controller(BaseHTTPRequestHandler):
       "configmaps": len(children["ConfigMap.v1"]),
     }
     prefix = "rso-"
+    prefixStore = "cluster-"
 
     kubeconfig = yaml.safe_load(base64.b64decode(parent["data"]["value"]).decode("utf-8"))
 
@@ -25,7 +26,7 @@ class Controller(BaseHTTPRequestHandler):
         "apiVersion": "external-secrets.io/v1beta1",
         "kind": "ClusterSecretStore",
         "metadata": {
-          "name": prefix + clusterName
+          "name": prefixStore + clusterName
         },
         "spec": {
           "provider": {

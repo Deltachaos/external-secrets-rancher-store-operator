@@ -5,10 +5,10 @@
 replicaCount: 1
 
 image:
-  repository: python
-  pullPolicy: IfNotPresent
+  repository: ghcr.io/deltachaos/external-secrets-rancher-store-operator
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "3"
+  tag: "latest"
 
 imagePullSecrets: []
 nameOverride: ""

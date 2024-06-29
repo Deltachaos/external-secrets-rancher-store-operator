@@ -8,7 +8,7 @@ The `ClusterSecretStore`'s are named `cluster-{{ clusterName }}`. The prefix can
 
 # Why should I use it?
 
-Managing secrets with Tools like External Secrets Operator always results in a chicken and egg problem. The first
+Managing secrets with tools like External Secrets Operator always results in a chicken and egg problem. The first
 secret store that needs to be configured, requires secrets himself to connect.
 
 As I manage all my Kubernetes clusters with Rancher, my solution for this problem is, to provide my Clusters with this

@@ -7,6 +7,21 @@ the Rancher server, including the cluster `local` itself.
 The `ClusterSecretStore`'s are named `cluster-{{ clusterName }}-{{ namespace }}`.
 The prefix cannot be configured currently.
 
+# Filter Namespaces
+
+In the values.yaml you can configure the namespaces that should be replicated using regex filters. The first match in
+cluster will be used to filter the namespaces:
+
+```yaml
+namespaces:
+  - clusterName: local
+    namespaces:
+      - fleet-.*
+  - clusterName: .*
+    namespaces:
+      - default
+```
+
 # Why should I use it?
 
 Managing secrets with tools like External Secrets Operator always results in a chicken and egg problem. The first

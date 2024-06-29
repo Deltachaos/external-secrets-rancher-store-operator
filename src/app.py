@@ -37,12 +37,11 @@ class Controller(BaseHTTPRequestHandler):
 
     loader = KubeConfigLoader(kubeconfig)
     client_config = client.Configuration()
-    loader.load_and_set(config)
+    loader.load_and_set(client_config)
     client.Configuration.set_default(client_config)
 
     v1 = client.CoreV1Api(api_client=config.new_client_from_config())
     namespaces = v1.list_namespace()
-
 
     kubernetesServer = kubeconfig["clusters"][0]["cluster"]["server"]
     kubernetesCa = base64.b64decode(kubeconfig["clusters"][0]["cluster"]["certificate-authority-data"]).decode("utf-8")

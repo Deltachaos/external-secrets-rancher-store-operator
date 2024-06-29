@@ -9,7 +9,7 @@ The prefix cannot be configured currently.
 
 # Filter Namespaces
 
-In the values.yaml you can configure the namespaces that should be replicated using regex filters. The first match in
+In the values.yaml you need configure the namespaces that should be replicated using regex filters. The first match in
 cluster will be used to filter the namespaces:
 
 ```yaml

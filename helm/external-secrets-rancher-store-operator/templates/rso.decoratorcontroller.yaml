@@ -7,7 +7,7 @@ spec:
   resources:
     - apiVersion: v1
       resource: secrets
-      matchLabels:
+      labelSelector:
         matchExpressions:
           - { key: 'cluster.x-k8s.io/cluster-name', operator: Exists }
   attachments:

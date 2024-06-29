@@ -16,7 +16,7 @@ class Controller(BaseHTTPRequestHandler):
         patternCluster = re.compile(clusterFilter["clusterName"])
         if patternCluster.match(cluster):
             for filter in clusterFilter["namespaces"]:
-                patternNamespace = re.compile(clusterFilter["clusterName"])
+                patternNamespace = re.compile(filter)
                 if patternNamespace.match(namespace):
                     return True
 

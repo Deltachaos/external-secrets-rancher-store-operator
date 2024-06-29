@@ -1,0 +1,22 @@
+apiVersion: metacontroller.k8s.io/v1alpha1
+kind: CompositeController
+metadata:
+  name: {{ include "external-secrets-rancher-store-operator.fullname" . }}
+spec:
+  generateSelector: true
+  parentResource:
+    apiVersion: provisioning.cattle.io/v1
+    resource: clusters
+  childResources:
+    - apiVersion: v1
+      resource: configmaps
+      updateStrategy:
+        method: InPlace
+    - apiVersion: external-secrets.io/v1beta1
+      resource: clustersecretstores
+      updateStrategy:
+        method: InPlace
+  hooks:
+    sync:
+      webhook:
+        url: http://{{ include "external-secrets-rancher-store-operator.fullname" . }}/sync

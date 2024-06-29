@@ -3,7 +3,7 @@ kind: DecoratorController
 metadata:
   name: {{ include "external-secrets-rancher-store-operator.fullname" . }}
 spec:
-  generateSelector: false
+  generateSelector: true
   resources:
     - apiVersion: v1
       resource: secrets

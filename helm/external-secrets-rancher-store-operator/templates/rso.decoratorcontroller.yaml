@@ -3,7 +3,7 @@ kind: DecoratorController
 metadata:
   name: {{ include "external-secrets-rancher-store-operator.fullname" . }}
 spec:
-  generateSelector: true
+  generateSelector: false
   resources:
     - apiVersion: provisioning.cattle.io/v1
       resource: clusters

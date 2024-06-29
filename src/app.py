@@ -9,7 +9,7 @@ import os
 import re
 
 class Controller(BaseHTTPRequestHandler):
-  def matchesFilter(cluster, namespace):
+  def matchesFilter(self, cluster, namespace):
     namespaceFilter = json.loads(os.environ['NAMESPACES'])
 
     for clusterFilter in namespaceFilter:

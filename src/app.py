@@ -23,7 +23,7 @@ class Controller(BaseHTTPRequestHandler):
     loader.load_and_set(config)
     client.Configuration.set_default(config)
 
-    v1 = client.CoreV1Api()
+    v1 = client.CoreV1Api(api_client=config.new_client_from_config())
     namespaces = v1.list_namespace()
 
     kubernetesServer = kubeconfig["clusters"][0]["cluster"]["server"]

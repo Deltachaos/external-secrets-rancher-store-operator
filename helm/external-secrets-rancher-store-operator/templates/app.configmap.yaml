@@ -43,7 +43,6 @@ data:
                       }
                     }
                   },
-                  "remoteNamespace": "default",
                   "server": {
                     "caProvider": {
                       "key": "ca.crt",

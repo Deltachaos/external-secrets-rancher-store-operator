@@ -80,7 +80,7 @@ data:
         print(observed["children"])
         desired = self.sync(observed["parent"], observed["children"])
         print("desired")
-        print(observed["desired"])
+        print(desired)
 
         self.send_response(200)
         self.send_header("Content-type", "application/json")

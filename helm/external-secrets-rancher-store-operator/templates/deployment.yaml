@@ -5,9 +5,7 @@ metadata:
   labels:
     {{- include "external-secrets-rancher-store-operator.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
-  {{- end }}
   selector:
     matchLabels:
       {{- include "external-secrets-rancher-store-operator.selectorLabels" . | nindent 6 }}

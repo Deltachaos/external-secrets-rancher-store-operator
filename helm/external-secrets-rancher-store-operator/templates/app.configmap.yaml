@@ -17,7 +17,7 @@ data:
           "clustersecretstores": len(children["ClusterSecretStore.external-secrets.io/v1beta1"]),
           "configmaps": len(children["ConfigMap.v1"]),
         }
-        prefix = "testrso-"
+        prefix = "rso-"
         kubeconfigName = parent["metadata"]["name"]
         clusterNamespace = parent["metadata"]["namespace"]
         clusterName = parent["metadata"]["labels"]["cluster.x-k8s.io/cluster-name"]

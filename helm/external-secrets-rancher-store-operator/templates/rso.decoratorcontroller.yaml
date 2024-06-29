@@ -5,10 +5,11 @@ metadata:
 spec:
   generateSelector: false
   resources:
-    - apiVersion: provisioning.cattle.io/v1
-      resource: clusters
-      matchExpressions:
-        - { key: namespace, operator: In, values: [fleet-default] }
+    - apiVersion: v1
+      resource: secrets
+      matchLabels:
+        matchExpressions:
+          - { key: 'cluster.x-k8s.io/cluster-name', operator: Exists }
   attachments:
     - apiVersion: v1
       resource: configmaps

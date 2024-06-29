@@ -17,16 +17,16 @@ data:
           "clustersecretstores": len(children["ClusterSecretStore.external-secrets.io/v1beta1"]),
           "configmaps": len(children["ConfigMap.v1"]),
         }
-
+        prefix = "testrso-"
+        kubeconfigName = parent["metadata"]["name"]
+        clusterNamespace = parent["metadata"]["name"]
+        clusterName = parent["metadata"]["labels"]["cluster.x-k8s.io/cluster-name"]
         desired_resources = [
           {
             "apiVersion": "external-secrets.io/v1beta1",
             "kind": "ClusterSecretStore",
             "metadata": {
-              "name": "rso-" + parent["metadata"]["name"],
-              "labels": {
-                "app.kubernetes.io/name": parent["metadata"]["name"]
-              }
+              "name": prefix + clusterName
             },
             "spec": {
               "provider": {
@@ -35,8 +35,8 @@ data:
                     "token": {
                       "bearerToken": {
                         "key": "token",
-                        "name": parent["metadata"]["name"] + "-kubeconfig",
-                        "namespace": parent["metadata"]["namespace"]
+                        "name": kubeconfigName,
+                        "namespace": clusterNamespace
                       }
                     }
                   },
@@ -44,8 +44,8 @@ data:
                   "server": {
                     "caProvider": {
                       "key": "ca.crt",
-                      "name": "rso-" + parent["metadata"]["name"] + "-kube-root-ca.crt",
-                      "namespace": parent["metadata"]["namespace"],
+                      "name": prefix + clusterName + "-kube-root-ca.crt",
+                      "namespace": clusterNamespace,
                       "type": "ConfigMap"
                     },
                     "url": "https://10.43.220.193/k8s/clusters/c-m-kpfqd4s2"
@@ -58,11 +58,8 @@ data:
             "apiVersion": "v1",
             "kind": "ConfigMap",
             "metadata": {
-              "name": "rso-" + parent["metadata"]["name"] + "-kube-root-ca.crt",
-              "namespace": parent["metadata"]["namespace"],
-              "labels": {
-                "app.kubernetes.io/name": parent["metadata"]["name"]
-              }
+              "name": prefix + clusterName + "-kube-root-ca.crt",
+              "namespace": clusterNamespace
             },
             "data": {
               "ca.crt": "-----BEGIN CERTIFICATE-----\nMIIBvjCCAWOgAwIBAgIBADAKBggqhkjOPQQDAjBGMRwwGgYDVQQKExNkeW5hbWlj\nbGlzdGVuZXItb3JnMSYwJAYDVQQDDB1keW5hbWljbGlzdGVuZXItY2FAMTcxOTQy\nOTI4MTAeFw0yNDA2MjYxOTE0NDFaFw0zNDA2MjQxOTE0NDFaMEYxHDAaBgNVBAoT\nE2R5bmFtaWNsaXN0ZW5lci1vcmcxJjAkBgNVBAMMHWR5bmFtaWNsaXN0ZW5lci1j\nYUAxNzE5NDI5MjgxMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEHlGspFAnxLYa\nj/Nlodurwuq3+kvb+j/O/HRn6jqKxqHebnO/0ZCI62ld2jb81kKLG5lJr4fXHl/k\ns/xB5bLuNKNCMEAwDgYDVR0PAQH/BAQDAgKkMA8GA1UdEwEB/wQFMAMBAf8wHQYD\nVR0OBBYEFB4jPxF2IpdNnhfOUaaZ691+dBPeMAoGCCqGSM49BAMCA0kAMEYCIQCf\nr3XMHI4p8AM3qGCedkCuOU3T2j/2wCymITnFBF8drwIhAPd6fqMYWRQzBua2anrU\nEL1cz3d5MH4ziXiIVQOmfjGG\n-----END CERTIFICATE-----\n"

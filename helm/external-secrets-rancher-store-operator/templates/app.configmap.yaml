@@ -19,7 +19,7 @@ data:
         }
         prefix = "testrso-"
         kubeconfigName = parent["metadata"]["name"]
-        clusterNamespace = parent["metadata"]["name"]
+        clusterNamespace = parent["metadata"]["namespace"]
         clusterName = parent["metadata"]["labels"]["cluster.x-k8s.io/cluster-name"]
         desired_resources = [
           {

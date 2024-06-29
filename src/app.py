@@ -4,6 +4,7 @@ import base64
 import yaml
 from re import L
 from kubernetes.config.kube_config import KubeConfigLoader
+from kubernetes import client, config
 from io import StringIO
 
 class Controller(BaseHTTPRequestHandler):
